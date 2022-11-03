@@ -127,7 +127,7 @@ git_clone(Node,Cookie,AppId,DirToClone)->
     CurrentCookie=erlang:get_cookie(),
     erlang:set_cookie(node(),list_to_atom(Cookie)),
 
-    Reply=case config_node:application_gitpath(AppId) of
+    Reply=case config:application_gitpath(AppId) of
 		{error,Reason}->
 		    {error,[AppId,Reason]};
 		GitPath->
