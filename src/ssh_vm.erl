@@ -107,7 +107,7 @@ delete_dir(HostName,Dir)->
     Pwd=config:host_passwd(HostName),
     TimeOut=5000,
     my_ssh:ssh_send(Ip,SshPort,Uid,Pwd,"rm -rf "++Dir,TimeOut),
-    case ssh_vm:is_dir(Dir,{Ip,SshPort,Uid,Pwd,TimeOut}) of
+    case ssh_vm:is_dir(HostName,Dir) of
 	false->
 	    {ok,Dir};
 	true ->
@@ -140,7 +140,12 @@ create_dir(HostName,Dir)->
 %% Description: Initiate the eunit tests, set upp needed processes etc
 %% Returns: non
 %% --------------------------------------------------------------------
-is_dir(Dir,{Ip,SshPort,Uid,Pwd,TimeOut})->
+is_dir(HostName,Dir)->
+    Ip=config:host_local_ip(HostName),
+    SshPort=config:host_ssh_port(HostName),
+    Uid=config:host_uid(HostName),
+    Pwd=config:host_passwd(HostName),
+    TimeOut=5000,
     case my_ssh:ssh_send(Ip,SshPort,Uid,Pwd,?IsDir(Dir),TimeOut) of
 	["false"]->
 	    false;
