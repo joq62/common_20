@@ -57,7 +57,8 @@ git_clone_to_dir(Node,GitPath,DirToClone)->
 			    case rpc:call(Node,os,cmd,["git clone "++GitPath++" "++TempDir],5000) of
 				{badrpc,Reason}->
 				    {error,[badrpc,Reason]};
-				_->
+				CloneResult->
+				    io:format("CloneResult ~p~n",[{CloneResult,?MODULE,?LINE}]),
 				    case rpc:call(Node,os,cmd,["mv  "++TempDir++"/*"++" "++CloneDir],5000) of
 					{badrpc,Reason}->
 					    {error,[badrpc,Reason]};
