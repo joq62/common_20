@@ -23,7 +23,8 @@
 %% --------------------------------------------------------------------
 start()->
     ok=setup(),
-    ok=application:start(common),
+    {ok,_}=common:start(),
+    pong=common:ping(),
     ok=map_test(),
     ok=list_len(),
     ok=list_duplicates(),
