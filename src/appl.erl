@@ -58,14 +58,13 @@ git_clone_to_dir(Node,GitPath,DirToClone)->
 				{badrpc,Reason}->
 				    {error,[badrpc,Reason]};
 				CloneResult->
-				    io:format("CloneResult ~p~n",[{CloneResult,?MODULE,?LINE}]),
 				    case rpc:call(Node,os,cmd,["mv  "++TempDir++"/*"++" "++CloneDir],5000) of
 					{badrpc,Reason}->
-					    {error,[badrpc,Reason]};
+					    {error,[badrpc,Reason,CloneResult]};
 					[]->
 					    case rpc:call(Node,os,cmd,["rm -r  "++TempDir],5000) of
 						{badrpc,Reason}->
-						    {error,[badrpc,Reason]};
+						    {error,[badrpc,Reason,CloneResult]};
 						[]->
 						    {ok,CloneDir}
 					    end
