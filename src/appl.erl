@@ -67,7 +67,9 @@ git_clone_to_dir(Node,GitPath,DirToClone)->
 						    {error,[badrpc,Reason,CloneResult]};
 						[]->
 						    {ok,CloneDir}
-					    end
+					    end;
+					Reason ->
+					    {error,[Reason,{dir_to_clone,DirToClone},CloneResult]}
 				    end
 			    end
 		    end
