@@ -22,6 +22,7 @@
 	 load/3,
 	 unload/3,
 	 start/2,
+	 start/3,
 	 start/4,
 	 stop/2
 	]).
@@ -139,16 +140,20 @@ stop(Node,App)->
 %% Returns: non
 %% --------------------------------------------------------------------
 unload(Node,App,Dir)->
-    rpc:call(Node,application,unload,[App],5000), 
-    rpc:call(Node,os,cmd,["rm -rf "++Dir],5000),
+    rpc:call(Node,application,unload,[App],2*5000), 
+    rpc:call(Node,os,cmd,["rm -rf "++Dir],2*5000),
     ok.
 %% --------------------------------------------------------------------
 %% Function:start/0 
 %% Description: Initiate the eunit tests, set upp needed processes etc
 %% Returns: non
 %% --------------------------------------------------------------------
+-define(TimeOut,2*5000).
 start(Node,App)->
-    case rpc:call(Node,application,start,[App],5000) of
+    start(Node,App,?TimeOut).
+
+start(Node,App,TimeOut)->
+    case rpc:call(Node,application,start,[App],TimeOut) of
 	{badrpc,Reason}->
 	    {error,[badrpc,Reason,App]};
 	{error, Reason}->
