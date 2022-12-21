@@ -32,42 +32,6 @@
 %% ====================================================================
 %% External functions
 %% ====================================================================
--define(DeleteDirTime,100).
--define(DeleteDirIterations,25).
-
-rm_dir(Node,Dir)->
-    Result=case rpc:call(Node,os,cmd,["rm -rf "++Dir],5000) of
-	       {badrpc,Reason}->
-		   {error,["failed to delete dir :",badrpc,Reason,?MODULE,?FUNCTION_NAME,?LINE]};
-	       [] ->
-		   case check_is_deleted(Node,Dir) of
-		       false->
-			   {error,["failed to delete dir : ",Node,Dir]};
-		       true ->
-			   ok
-		   end
-	   end,
-    Result.
-
-check_is_deleted(Node,Dir) ->
-    check_is_deleted(Node,Dir,?DeleteDirIterations,?DeleteDirTime,false).
-    
-check_is_deleted(_Node,_Dir,_Num,_Time,true)->
-    true;
-check_is_deleted(_Node,_Dir,0,_Time,Bool) ->
-    Bool;
-check_is_deleted(Node,Dir,N,Time,_Bool) ->
-    NewBool=case rpc:call(Node,filelib,is_dir,[Dir],3000) of
-		{badrpc,_Reason}->
-		    timer:sleep(Time),
-		    false;
-		true ->
-		    timer:sleep(Time),
-		    false;
-		false->
-		    true
-	    end,
-    check_is_deleted(Node,Dir,N-1,Time,NewBool).
 
 %% --------------------------------------------------------------------
 %% Function:start/0 
