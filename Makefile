@@ -3,7 +3,9 @@ all:
 	rm -rf erl_cra*;
 	rm -rf ebin;
 	mkdir ebin;		
-	erlc -I include -o ebin src/*.erl;
+	rebar3 compile;	
+	cp _build/default/lib/*/ebin/* ebin;
+	rm -rf _build*;
 	git add -f *;
 	git commit -m $(m);
 	git push;
@@ -15,7 +17,9 @@ eunit:
 	rm -rf ebin;
 	mkdir tests_ebin;
 	erlc -I include -o tests_ebin tests/*.erl;
-	mkdir ebin;
-	erlc -I include -o ebin src/*.erl;
+	mkdir ebin;		
+	rebar3 compile;	
+	cp _build/default/lib/*/ebin/* ebin;
+	rm -rf _build*;
 	erl -pa ebin -pa tests_ebin\
             -sname common_test -run $(m) start -setcookie cookie_test
