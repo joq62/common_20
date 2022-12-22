@@ -11,7 +11,7 @@
 %%% -------------------------------------------------------------------
 -module(all).   
  
--export([start/0]).
+-export([start/1]).
 %% --------------------------------------------------------------------
 %% Include files
 %% --------------------------------------------------------------------
@@ -21,7 +21,7 @@
 %% Description: Based on hosts.config file checks which hosts are avaible
 %% Returns: List({HostId,Ip,SshPort,Uid,Pwd}
 %% --------------------------------------------------------------------
-start()->
+start([])->
     ok=setup(),
     ok=application:start(common),
     pong=common:ping(),
