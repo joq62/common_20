@@ -12,10 +12,9 @@ all:
 	rm -rf tests_ebin;
 #  	dependencies
 	mkdir ebin;
-	rebar3 compile;	
-	cp _build/default/lib/*/ebin/* ebin;
-	rm -rf _build*;
-	git add -f *;
+	erlc -I include -o ebin src/*.erl;
+	rm -rf ebin;
+	git add *;
 	git commit -m $(m);
 	git push;
 	echo Ok there you go!
@@ -65,7 +64,9 @@ eunit:
 #	git clone https://github.com/joq62/nodelog.git;
 #	Applications
 	mkdir ebin;		
-	rebar3 compile;	
-	cp _build/default/lib/*/ebin/* ebin;
-	rm -rf _build*;
+#	rebar3 compile;	
+#	cp _build/default/lib/*/ebin/* ebin;
+#	rm -rf _build*;
+	erlc -I include -o ebin src/*.erl;
+	rm -rf ebin;
 	erl -pa */ebin -pa ebin -pa tests_ebin -sname do_test -run $(m) start $(a) -setcookie cookie_test
